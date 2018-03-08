@@ -99,3 +99,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+*.jpg
+Caves/__MACOSX/._input3.cav
+Caves/.idea/misc.xml
+Caves/.idea/inspectionProfiles/Project_Default.xml
+Caves/__MACOSX/._input2.cav
+Caves/.idea/workspace.xml
+Caves/.idea/modules.xml
+Caves/.idea/Caves.iml
+Caves/__MACOSX/._input1.cav
