@@ -27,7 +27,7 @@ def chooseFile():
                 # Try to read from given file
                 try:
                     # Print output from reading the caverns
-                    coords, connections = ReadCaverns.ReadCavern("../caves/" + files[theIn - 1])
+                    chooseType(ReadCaverns.ReadCavern("../caves/" + files[theIn - 1]))
                     # Return true
                     return True
                 except:
@@ -44,11 +44,25 @@ def chooseFile():
             print("ERROR: Please enter a valid number")
 
 
-def chooseType():
+def chooseType(coords, connections):
     print("1: Step Through")
     print("2: Find Fast")
     print("3: Back")
-    theIn = input("Please choose a search type: ")
+
+    while True:
+        try:
+            theIn = int(input("Please choose a search type: "))
+
+            if theIn == 1:
+                # Call step through
+                return 0
+            elif theIn == 2:
+                # Call find fast
+                return 0
+            elif theIn == 3:
+                return 1
+        except:
+            print("ERROR: Please enter a valid number")
 
 
 
