@@ -63,6 +63,8 @@ def chooseType(coords, connections):
                 return 0
             elif theIn == 2:
                 # Call find fast
+                print(PathFinder.FindFast(coords, connections))
+                chooseFile()
                 return 0
             elif theIn == 3:
                 # Go back to file selection
