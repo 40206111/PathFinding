@@ -59,7 +59,6 @@ def chooseType(coords, connections):
 
             if theIn == 1:
                 # Call step through
-                print(PathFinder.SquaredDist(coords[0], coords[1]))
                 return 0
             elif theIn == 2:
                 # Call find fast
