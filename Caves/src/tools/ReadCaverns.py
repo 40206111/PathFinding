@@ -16,11 +16,15 @@ class ReadCaverns(object):
                 return ReadCaverns.GetData(f)
             except:
                 # throw exception
+                # DEBUG
+                print("DEBUG: opening error")
                 exec("ERROR: cannot open file, " + str(file));
             # Return file name
             return file
         else:
             # Throw exception
+            #DEBUG
+            print("DEBUG: Reading Error")
             exec("ERROR: invalid file")
 
     # Method to check for .cav files
