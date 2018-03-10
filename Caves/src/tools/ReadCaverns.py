@@ -64,8 +64,6 @@ class ReadCaverns(object):
                 connections[j].append((int(data[i].strip())))
             # Close file
             file.close()
-            # *************DEBUG**************************
-            ReadCaverns.PrintCavern(coords, connections)
             # Return data
             return coords, connections
         else:
@@ -73,7 +71,7 @@ class ReadCaverns(object):
             file.close()
             exec("ERROR: Too many caves")
 
-    # Method to print cavern connections
+    # Method to print cavern connections for debugging
     @staticmethod
     def PrintCavern(coords, connections):
         print('\t\t', end='')
