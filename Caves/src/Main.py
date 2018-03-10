@@ -1,4 +1,5 @@
 from tools.ReadCaverns import ReadCaverns
+from tools.PathFinder import PathFinder
 from os import listdir
 
 __author__ = 'Emma'
@@ -26,8 +27,9 @@ def chooseFile():
             if 0 < theIn <= len(files):
                 # Try to read from given file
                 try:
+                    coords, connections = ReadCaverns.ReadCavern("../caves/" + files[theIn - 1])
                     # Print output from reading the caverns
-                    chooseType(ReadCaverns.ReadCavern("../caves/" + files[theIn - 1]))
+                    chooseType(coords, connections)
                     # Return true
                     return True
                 except:
@@ -45,32 +47,34 @@ def chooseFile():
 
 
 def chooseType(coords, connections):
-    print("1: Step Through")
-    print("2: Find Fast")
-    print("3: Back")
 
     while True:
+        print("1: Step Through")
+        print("2: Find Fast")
+        print("3: Back")
+
+        # Try to parse input
         try:
             theIn = int(input("Please choose a search type: "))
 
             if theIn == 1:
                 # Call step through
+                print(PathFinder.SquaredDist(coords[0], coords[1]))
                 return 0
             elif theIn == 2:
                 # Call find fast
                 return 0
             elif theIn == 3:
+                # Go back to file selection
+                chooseFile()
                 return 1
         except:
             print("ERROR: Please enter a valid number")
 
 
-
 def main():
     # Choose file to read
-    if chooseFile():
-        # For when running outside of pycharm to make sure it doesn't close immediately
-        input("press enter to end")
+    chooseFile();
 
     # Successful exit
     return 0
