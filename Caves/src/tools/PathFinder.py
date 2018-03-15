@@ -1,17 +1,13 @@
+
 __author__ = 'Emma'
 __project__ = 'Caves'
 
 
 class PathFinder(object):
-    # Method to step through the search
-    @staticmethod
-    def StepThrough(coords, connections):
-
-        return 0
 
     # Method to do the search
     @staticmethod
-    def FindFast(coords, connections):
+    def FindPath(coords, connections, stepping):
         print("Calculating...")
         path = {}
         # Set start and end coordinates
@@ -26,11 +22,15 @@ class PathFinder(object):
         # While openset isn't empty
         while openSet != {}:
             # set current to min score currently in the open set
-            current = PathFinder.FindMin(openSet, fScoreMap)
-
+            current = PathFinder.FindMin(openSet, fScoreMap, stepping)
+            if stepping:
+                input("current: " + str(current))
             # if goal reached
             if current == end:
-                print("GOAL REACHED")
+                if stepping:
+                    input("GOAL REACHED")
+                else:
+                    print("GOAL REACHED")
                 # return path
                 return PathFinder.GetPath(path, end)
 
@@ -49,7 +49,8 @@ class PathFinder(object):
                 # add to open set
                 if n not in openSet:
                     openSet.update([n])
-
+                if stepping:
+                    print("Checking neighbour: " + str(n))
                 # work out g score
                 tempGScore = gScoreMap[current] + PathFinder.SquaredDist(current, n)
 
@@ -68,13 +69,15 @@ class PathFinder(object):
 
     # Finding the minimum
     @staticmethod
-    def FindMin(theSet, m):
+    def FindMin(theSet, m, stepping):
         # Initialise min int and current min
         theMin = None
         currentMin = None
 
         # Loop through set
         for s in theSet:
+            if stepping:
+                print(str(s) + ": " + str(m[s]))
             # if Min hasn't been set yet
             if theMin is None:
                 theMin = m[s]
@@ -98,7 +101,7 @@ class PathFinder(object):
         # loop through connections
         for i in range(0, len(connections[j])):
             # if there is a connection add coord to neighbours
-            if connections[j][i] == 1:
+            if connections[i][j] == 1:
                 neighbours.add(coords[i])
         return neighbours
 
