@@ -27,13 +27,20 @@ def back():
         b[1].destroy()
     chooseFile()
 
+def Pathing(info, stepping):
+    for b in Window.buttons.items():
+        b[1].destroy()
+    #Window.main.geometry(str(Window.size[0] * 10) + 'x' + str(Window.size[1] * 10))
+    Window.createGrid(Window, info[0])
+    PathFinder.FindPath(info[0], info[1], stepping)
+
 def chooseType(info):
     for b in Window.buttons.items():
         b[1].destroy()
     Window.buttons.clear()
 
-    Window.button(Window, "Stepping", "Step Through", lambda: PathFinder.FindPath(info[0], info[1], True))
-    Window.button(Window, "Fast", "Find Fast", lambda: PathFinder.FindPath(info[0], info[1], False))
+    Window.button(Window, "Stepping", "Step Through", lambda: Pathing(info, True))
+    Window.button(Window, "Fast", "Find Fast", lambda: Pathing(info, False))
     Window.button(Window, "Back", "Back", lambda: back())
 
 

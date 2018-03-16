@@ -47,6 +47,9 @@ class ReadCaverns(object):
         # Initialise coords and connections
         coords = list()
         connections = []
+
+        y = 0
+        x = 0
         # Initialise j
         j = -1
 
@@ -54,7 +57,12 @@ class ReadCaverns(object):
         if amount <= 20:
             # Add coordinates to list of tuples
             for i in range(1, doubleAPlus - 1, 2):
-                coords.append((int(data[i].strip()),  int(data[i+1].strip())))
+                coord = (int(data[i].strip()),  int(data[i+1].strip()))
+                if coord[0] > x:
+                    x = coord[0]
+                if coord[1] > y:
+                    y = coord[1]
+                coords.append(coord)
             # Add data to "matrix" (list of lists)
             for i in range(doubleAPlus, doubleAPlus + amount * amount):
                 # If at the end of matrix row add new list to matrix
@@ -64,6 +72,8 @@ class ReadCaverns(object):
                 connections[j].append((int(data[i].strip())))
             # Close file
             file.close()
+
+            Window.size = tuple((x, y))
             # Return data
             return tuple((coords, connections))
         else:

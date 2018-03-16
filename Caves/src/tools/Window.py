@@ -8,6 +8,7 @@ class Window(object):
     instance = None
     main = None
     buttons = {}
+    size = 0
 
     def __init__(self):
         if Window.instance is None:
@@ -22,3 +23,13 @@ class Window(object):
         b = tk.Button(self.main, text=txt, width=25, command=command)
         b.pack()
         self.buttons.update({name: b})
+
+    def gridHelp(self, pic):
+        tk.Label(self.main, image=pic).pack()
+
+    def createGrid(self, coords):
+        pic = tk.PhotoImage(file="caverns2.gif")
+        tk.Label(Window.main, image=pic).pack(side="right")
+
+        #for c in coords:
+            #self.gridHelp(self, pic)
