@@ -10,15 +10,15 @@ class Window(object):
     buttons = {}
 
     def __init__(self):
-        if self.instance is None:
+        if Window.instance is None:
             self.create()
-        return self.instance
+        return Window.instance
 
     def create(self):
-        self.main = tk.Tk()
-        self.main.title("Path Finding")
+        Window.main = tk.Tk()
+        Window.main.title("Path Finding")
 
-    def button(self, name, file, command):
-        b = tk.Button(self.main, text=file, width=25, command=command)
+    def button(self, name, txt, command):
+        b = tk.Button(self.main, text=txt, width=25, command=command)
         b.pack()
         self.buttons.update({name: b})

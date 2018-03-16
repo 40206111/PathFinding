@@ -9,88 +9,39 @@ __project__ = 'Caves'
 
 # Create Directory buttons, doesn't work properly in single loop for some reason
 def dirButtons(win, file, i):
-    win.button("button" + str(i), file, lambda: ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i)))
+    win.button(win, "button" + str(i), file, lambda: chooseType(ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i))))
 
 # Menu method to choose cave file
 def chooseFile():
     # Get files in correct directory
     files = listdir("../caves")
-    win = Window()
 
     for i in range(0, len(files)):
-        dirButtons(win, files[i], i)
-    win.main.mainloop()
+        dirButtons(Window, files[i], i)
 
-    '''    
-    # Loop for valid input
-    while True:
-        # print out files in directory
-        for i in range(0, len(files)):
-            print(str(i + 1) + ": " + files[i])
-        # Print exit option
-        print(str(len(files) + 1) + ": Exit")
-
-        # Try to parse input
-        try:
-            # Set theIn to int
-            theIn = int(input("Please choose cave file: "))
-            # Check if input corresponds to file
-            if 0 < theIn <= len(files):
-                # Try to read from given file
-                try:
-                    coords, connections = ReadCaverns.ReadCavern("../caves/" + files[theIn - 1])
-                    # Print output from reading the caverns
-                    chooseType(coords, connections)
-                    # Return true
-                    return True
-                except:
-                    # Tell user what the problem is
-                    print("ERROR: Invalid file, please choose a valid file")
-            #  Exit if the user chooses to exit
-            elif theIn == len(files) + 1:
-                return False
-            else:
-                # Inform user of problem
-                print("ERROR: value out of range")
-        except:
-            # Inform user of problem
-            print("ERROR: Please enter a valid number")'''
+    Window.button(Window, "Exit", "Exit", Window.main.destroy)
 
 
-def chooseType(coords, connections):
+def back():
+    for b in Window.buttons.items():
+        b[1].destroy()
+    chooseFile()
 
-    while True:
-        print("1: Step Through")
-        print("2: Find Fast")
-        print("3: Back")
+def chooseType(info):
+    for b in Window.buttons.items():
+        b[1].destroy()
+    Window.buttons.clear()
 
-        # Try to parse input
-        try:
-            theIn = int(input("Please choose a search type: "))
-
-            if theIn == 1:
-                # Call step through
-                print(PathFinder.FindPath(coords, connections, True))
-                print()
-                chooseFile()
-                return 0
-            elif theIn == 2:
-                # Call find fast
-                print(PathFinder.FindPath(coords, connections, False))
-                print()
-                chooseFile()
-                return 0
-            elif theIn == 3:
-                # Go back to file selection
-                chooseFile()
-                return 1
-        except:
-            print("ERROR: Please enter a valid number")
+    Window.button(Window, "Stepping", "Step Through", lambda: PathFinder.FindPath(info[0], info[1], True))
+    Window.button(Window, "Fast", "Find Fast", lambda: PathFinder.FindPath(info[0], info[1], False))
+    Window.button(Window, "Back", "Back", lambda: back())
 
 
 def main():
+    Window()
     # Choose file to read
     chooseFile();
+    Window.main.mainloop()
 
     # Successful exit
     return 0

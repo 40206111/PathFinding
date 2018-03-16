@@ -65,7 +65,7 @@ class ReadCaverns(object):
             # Close file
             file.close()
             # Return data
-            return coords, connections
+            return tuple((coords, connections))
         else:
             # Close file
             file.close()
