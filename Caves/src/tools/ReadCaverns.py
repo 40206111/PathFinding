@@ -1,13 +1,13 @@
+from tools.Window import Window
 
 __author__ = 'Emma'
 __project__ = 'Caves'
 
 
 class ReadCaverns(object):
-
     # Method to read from cavern file
     @staticmethod
-    def ReadCavern(file):
+    def ReadCavern(file, button):
         # check that it's a .cav file
         if ReadCaverns.CheckFile(file):
             # try to open the file
@@ -18,14 +18,14 @@ class ReadCaverns(object):
                 # throw exception
                 # DEBUG
                 print("DEBUG: opening error")
-                exec("ERROR: cannot open file, " + str(file));
+                Window.buttons[button].config(fg='red')
             # Return file name
             return file
         else:
             # Throw exception
             #DEBUG
             print("DEBUG: Reading Error")
-            exec("ERROR: invalid file")
+            Window.buttons[button].config(fg='red')
 
     # Method to check for .cav files
     @staticmethod

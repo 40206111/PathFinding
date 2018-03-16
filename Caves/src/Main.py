@@ -1,16 +1,27 @@
 from tools.ReadCaverns import ReadCaverns
 from tools.PathFinder import PathFinder
+from tools.Window import Window
 from os import listdir
 
 __author__ = 'Emma'
 __project__ = 'Caves'
 
 
+# Create Directory buttons, doesn't work properly in single loop for some reason
+def dirButtons(win, file, i):
+    win.button("button" + str(i), file, lambda: ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i)))
+
 # Menu method to choose cave file
 def chooseFile():
     # Get files in correct directory
     files = listdir("../caves")
+    win = Window()
 
+    for i in range(0, len(files)):
+        dirButtons(win, files[i], i)
+    win.main.mainloop()
+
+    '''    
     # Loop for valid input
     while True:
         # print out files in directory
@@ -43,7 +54,7 @@ def chooseFile():
                 print("ERROR: value out of range")
         except:
             # Inform user of problem
-            print("ERROR: Please enter a valid number")
+            print("ERROR: Please enter a valid number")'''
 
 
 def chooseType(coords, connections):
