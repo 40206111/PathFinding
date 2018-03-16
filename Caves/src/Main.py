@@ -11,6 +11,7 @@ __project__ = 'Caves'
 def dirButtons(win, file, i):
     win.button(win, "button" + str(i), file, lambda: chooseType(ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i))))
 
+
 # Menu method to choose cave file
 def chooseFile():
     # Get files in correct directory
@@ -27,17 +28,20 @@ def back():
         b[1].destroy()
     chooseFile()
 
+
 def Pathing(info, stepping):
-    for b in Window.buttons.items():
-        b[1].destroy()
-    #Window.main.geometry(str(Window.size[0] * 10) + 'x' + str(Window.size[1] * 10))
-    Window.createGrid(Window, info[0])
-    PathFinder.FindPath(info[0], info[1], stepping)
+    Window.removeButtons()
+    Window.createGrid(Window, info[0], info[1])
+    Window.button(Window, "back", "Menu", lambda: toMenu())
+    PathFinder.FindPath(info[0], info[1])
+
+def toMenu():
+    Window.removeButtons()
+    chooseFile()
+
 
 def chooseType(info):
-    for b in Window.buttons.items():
-        b[1].destroy()
-    Window.buttons.clear()
+    Window.removeButtons()
 
     Window.button(Window, "Stepping", "Step Through", lambda: Pathing(info, True))
     Window.button(Window, "Fast", "Find Fast", lambda: Pathing(info, False))

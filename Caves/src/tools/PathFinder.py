@@ -1,3 +1,4 @@
+from tools.Window import Window
 
 __author__ = 'Emma'
 __project__ = 'Caves'
@@ -7,12 +8,15 @@ class PathFinder(object):
 
     # Method to do the search
     @staticmethod
-    def FindPath(coords, connections, stepping):
+    def FindPath(coords, connections):
         print("Calculating...")
         path = {}
         # Set start and end coordinates
         start = coords[0]
         end = coords[len(coords) - 1]
+        Window.can.itemconfig(Window.points[start], fill='#FFC0CB')
+        Window.can.itemconfig(Window.points[end], fill='#b1e3e7')
+
         # Initialise sets
         closedSet = set()
         openSet = {start}
@@ -20,19 +24,20 @@ class PathFinder(object):
         fScoreMap = {start: PathFinder.SquaredDist(start, end)}
 
         # While openset isn't empty
-        while openSet != {}:
+        while len(openSet) != 0:
             # set current to min score currently in the open set
-            current = PathFinder.FindMin(openSet, fScoreMap, stepping)
-            if stepping:
-                input("current: " + str(current))
+            current = PathFinder.FindMin(openSet, fScoreMap)
+            if current != start and current != end:
+                Window.can.itemconfig(Window.points[current], fill='#FFA500')
+
             # if goal reached
             if current == end:
-                if stepping:
-                    input("GOAL REACHED")
-                else:
-                    print("GOAL REACHED")
+                print("GOAL REACHED")
                 # return path
-                return PathFinder.GetPath(path, end)
+                for p in PathFinder.GetPath(path, end):
+                    if p != start and p != end:
+                        Window.can.itemconfig(Window.points[p], fill='green')
+                return 0
 
             # Find the caves this node is connected too
             neighbours = PathFinder.FindNeighbours(current, coords, connections)
@@ -49,8 +54,6 @@ class PathFinder(object):
                 # add to open set
                 if n not in openSet:
                     openSet.update([n])
-                if stepping:
-                    print("Checking neighbour: " + str(n))
                 # work out g score
                 tempGScore = gScoreMap[current] + PathFinder.SquaredDist(current, n)
 
@@ -69,15 +72,13 @@ class PathFinder(object):
 
     # Finding the minimum
     @staticmethod
-    def FindMin(theSet, m, stepping):
+    def FindMin(theSet, m):
         # Initialise min int and current min
         theMin = None
         currentMin = None
 
         # Loop through set
         for s in theSet:
-            if stepping:
-                print(str(s) + ": " + str(m[s]))
             # if Min hasn't been set yet
             if theMin is None:
                 theMin = m[s]
@@ -120,6 +121,7 @@ class PathFinder(object):
             # update current
             current = camefrom[current]
             path.append(current)
+
         # Return path reversed
         return path[::-1]
 

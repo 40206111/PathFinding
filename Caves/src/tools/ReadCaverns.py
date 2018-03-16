@@ -73,7 +73,7 @@ class ReadCaverns(object):
             # Close file
             file.close()
 
-            Window.size = tuple((x, y))
+            Window.size = tuple((x + 2, y + 2))
             # Return data
             return tuple((coords, connections))
         else:
