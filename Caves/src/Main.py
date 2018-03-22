@@ -8,8 +8,8 @@ __project__ = 'Caves'
 
 
 # Create Directory buttons, doesn't work properly in single loop for some reason
-def dirButtons(win, file, i):
-    win.button(win, "button" + str(i), file, lambda: chooseType(ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i))))
+def dirButtons(file, i):
+    Window.button("Button" + str(i), file, lambda: chooseType(ReadCaverns.ReadCavern("../caves/" + file, "button" + str(i))))
 
 
 # Menu method to choose cave file
@@ -18,9 +18,9 @@ def chooseFile():
     files = listdir("../caves")
 
     for i in range(0, len(files)):
-        dirButtons(Window, files[i], i)
+        dirButtons(files[i], i)
 
-    Window.button(Window, "Exit", "Exit", Window.main.destroy)
+    Window.button("Exit", "Exit", Window.main.destroy)
 
 
 def back():
@@ -31,8 +31,8 @@ def back():
 
 def Pathing(info, stepping):
     Window.removeButtons()
-    Window.createGrid(Window, info[0], info[1])
-    Window.button(Window, "back", "Menu", lambda: toMenu())
+    Window.createGrid(info[0], info[1])
+    Window.button("back", "Menu", lambda: toMenu())
     PathFinder.FindPath(info[0], info[1])
 
 def toMenu():
@@ -43,13 +43,13 @@ def toMenu():
 def chooseType(info):
     Window.removeButtons()
 
-    Window.button(Window, "Stepping", "Step Through", lambda: Pathing(info, True))
-    Window.button(Window, "Fast", "Find Fast", lambda: Pathing(info, False))
-    Window.button(Window, "Back", "Back", lambda: back())
+    Window.button("Stepping", "Step Through", lambda: Pathing(info, True))
+    Window.button("Fast", "Find Fast", lambda: Pathing(info, False))
+    Window.button("Back", "Back", lambda: back())
 
 
 def main():
-    Window()
+    Window.main.title("Path Finder")
     # Choose file to read
     chooseFile();
     Window.main.mainloop()

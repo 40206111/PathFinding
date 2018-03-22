@@ -7,7 +7,7 @@ __project__ = 'Caves'
 
 class Window(object):
     instance = None
-    main = None
+    main = Tk()
     buttons = {}
     size = 0
     can = None
@@ -15,25 +15,18 @@ class Window(object):
     arrows = {}
     PPM = 30
 
-    def __init__(self):
-        if Window.instance is None:
-            self.create()
-        return Window.instance
-
-    def create(self):
-        Window.main = Tk()
-        Window.main.title("Path Finding")
-
-    def button(self, name, txt, command):
-        b = tk.Button(self.main, text=txt, width=25, command=command)
+    @staticmethod
+    def button(name, txt, command):
+        b = tk.Button(Window.main, text=txt, width=25, command=command)
         b.pack()
-        self.buttons.update({name: b})
+        Window.buttons.update({name: b})
 
-    def gridHelp(self, pic):
-        tk.Label(self.main, image=pic).pack()
+    @staticmethod
+    def gridHelp(pic):
+        tk.Label(Window.main, image=pic).pack()
 
-    def createGrid(self, coords, connections):
-        print(Window.size)
+    @staticmethod
+    def createGrid(coords, connections):
         Window.can = Canvas(Window.main, width=Window.size[0] * Window.PPM, height=Window.size[1] * Window.PPM)
 
         for i in range(0, len(connections)):
