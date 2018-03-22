@@ -16,11 +16,9 @@ class PathFinder(object):
         # Set start and end coordinates
         start = coords[0]
         end = coords[len(coords) - 1]
-        if step:
-            Window.buttons["Step"].wait_variable(Window.var)
-            Window.var.set(0)
+        # Set start and end colours
         Window.can.itemconfig(Window.points[start], fill='#FFC0CB', outline='#FFC0CB')
-        Window.can.itemconfig(Window.points[end], fill='#FFFFF1', outline='#FFFFF1')
+        Window.can.itemconfig(Window.points[end], fill='#808080', outline='#808080')
 
         # Initialise sets
         closedSet = set()
@@ -28,6 +26,7 @@ class PathFinder(object):
         gScoreMap = {start: 0}
         fScoreMap = {start: PathFinder.SquaredDist(start, end)}
 
+        # If step true wait for button press
         if step:
             Window.buttons["Step"].wait_variable(Window.var)
             Window.var.set(0)
@@ -36,7 +35,8 @@ class PathFinder(object):
         while len(openSet) != 0:
             # set current to min score currently in the open set
             current = PathFinder.FindMin(openSet, fScoreMap)
-            if current != start and current != end:
+            # Set current colour
+            if current != end:
                 Window.can.itemconfig(Window.points[current], fill='blue', outline='blue')
 
             # if goal reached
@@ -44,19 +44,34 @@ class PathFinder(object):
                 print("GOAL REACHED")
                 # return path
                 path = PathFinder.GetPath(path, end)
+                # output path length
                 Window.labels["path"].config(text="Path Length: " + str(len(path)))
-                for p in path:
-                    if p != start and p != end:
-                        if step:
-                            Window.buttons["Step"].wait_variable(Window.var)
-                            Window.var.set(0)
-                        Window.can.itemconfig(Window.points[p], fill='green', outline='green')
-                    elif p == end:
-                        if step:
-                            Window.buttons["Step"].wait_variable(Window.var)
-                            Window.var.set(0)
-                        Window.can.itemconfig(Window.points[p], fill='#32D732', outline='#32D732')
+                # Make arrows grey
+                for a in Window.arrows.items():
+                    Window.can.itemconfig(a[1], fill='#BFBFBF')
+
+                # loop through path
+                for i in range(0, len(path)):
+                    # if step Wait for button press
+                    if step:
+                        Window.buttons["Step"].wait_variable(Window.var)
+                        Window.var.set(0)
+
+                    if path[i] != end:
+                        # change arrows to green
+                        Window.can.tag_raise(Window.arrows[tuple((path[i], path[i+1]))])
+                        Window.can.itemconfig(Window.arrows[tuple((path[i], path[i+1]))], fill='green')
+                    if path[i] != start and path[i] != end:
+                        # fill middle nodes with green
+                        Window.can.itemconfig(Window.points[path[i]], fill='green', outline='green')
+                    elif path[i] == end:
+                        # fill end nodes with bright green
+                        Window.can.itemconfig(Window.points[path[i]], fill='#32D732', outline='#32D732')
+                    elif path[i] == start:
+                        # fill start node with yellow
+                        Window.can.itemconfig(Window.points[start], fill='yellow', outline='yellow')
                 if step:
+                    # destroy next button
                     Window.buttons["Step"].destroy()
                 return 0
 
@@ -90,7 +105,7 @@ class PathFinder(object):
 
             # add current path to closed set
             closedSet.update([current])
-            if step and current != start:
+            if step:
                 Window.buttons["Step"].wait_variable(Window.var)
                 Window.var.set(0)
                 Window.can.itemconfig(Window.points[current], fill='#b1e3e7', outline='#b1e3e7')

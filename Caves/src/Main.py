@@ -17,44 +17,53 @@ def chooseFile():
     # Get files in correct directory
     files = listdir("../caves")
 
+    # make a button for each file in directory
     for i in range(0, len(files)):
         dirButtons(files[i], i)
 
+    # Create a button to Exit window
     Window.button("Exit", "Exit", Window.main.destroy)
 
 
+# Method to be called by button to properly go back
 def back():
-    for b in Window.buttons.items():
-        b[1].destroy()
+    Window.removeButtons()
     chooseFile()
 
 
+# Method for button to call to begin pathing
 def Pathing(info, stepping):
+    # Remove everything currently on window
     Window.removeButtons()
+    # create visualisation of caves
     Window.createGrid(info[0], info[1])
+    # Add label for path length to go in
     Window.Label("path", "")
+    # Create next button if stepping
     if stepping:
-        Window.button("Step", "Next", lambda: Window.var.set(1) )
-    Window.button("back", "Menu", lambda: toMenu())
+        Window.button("Step", "Next", lambda: Window.var.set(1))
+    # Create back button
+    Window.button("back", "Menu", lambda: back())
+    # Call pathfinder on cave system
     PathFinder.FindPath(info[0], info[1], stepping)
 
-def toMenu():
-    Window.removeButtons()
-    chooseFile()
-
-
+# Method to show options
 def chooseType(info):
+    # clear window
     Window.removeButtons()
-
+    # create buttons
     Window.button("Stepping", "Step Through", lambda: Pathing(info, True))
     Window.button("Fast", "Find Fast", lambda: Pathing(info, False))
     Window.button("Back", "Back", lambda: back())
 
 
+# Start method
 def main():
     Window.main.title("Path Finder")
     # Choose file to read
-    chooseFile();
+    chooseFile()
+
+    #window loop
     Window.main.mainloop()
 
     # Successful exit
