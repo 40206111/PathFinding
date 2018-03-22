@@ -17,6 +17,7 @@ class Window(object):
     points = {}
     arrows = {}
     PPM = 30
+    var = tk.IntVar()
 
     @staticmethod
     def button(name, txt, command):

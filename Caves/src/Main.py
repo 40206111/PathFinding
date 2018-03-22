@@ -32,8 +32,11 @@ def back():
 def Pathing(info, stepping):
     Window.removeButtons()
     Window.createGrid(info[0], info[1])
+    Window.Label("path", "")
+    if stepping:
+        Window.button("Step", "Next", lambda: Window.var.set(1) )
     Window.button("back", "Menu", lambda: toMenu())
-    PathFinder.FindPath(info[0], info[1])
+    PathFinder.FindPath(info[0], info[1], stepping)
 
 def toMenu():
     Window.removeButtons()
