@@ -1,13 +1,13 @@
+from tools.Window import Window
 
 __author__ = 'Emma'
 __project__ = 'Caves'
 
 
 class ReadCaverns(object):
-
     # Method to read from cavern file
     @staticmethod
-    def ReadCavern(file):
+    def ReadCavern(file, button):
         # check that it's a .cav file
         if ReadCaverns.CheckFile(file):
             # try to open the file
@@ -18,14 +18,14 @@ class ReadCaverns(object):
                 # throw exception
                 # DEBUG
                 print("DEBUG: opening error")
-                exec("ERROR: cannot open file, " + str(file));
+                Window.buttons[button].config(fg='red')
             # Return file name
             return file
         else:
             # Throw exception
             #DEBUG
             print("DEBUG: Reading Error")
-            exec("ERROR: invalid file")
+            Window.buttons[button].config(fg='red')
 
     # Method to check for .cav files
     @staticmethod
@@ -47,6 +47,9 @@ class ReadCaverns(object):
         # Initialise coords and connections
         coords = list()
         connections = []
+
+        y = 0
+        x = 0
         # Initialise j
         j = -1
 
@@ -54,7 +57,12 @@ class ReadCaverns(object):
         if amount <= 20:
             # Add coordinates to list of tuples
             for i in range(1, doubleAPlus - 1, 2):
-                coords.append((int(data[i].strip()),  int(data[i+1].strip())))
+                coord = (int(data[i].strip()),  int(data[i+1].strip()))
+                if coord[0] > x:
+                    x = coord[0]
+                if coord[1] > y:
+                    y = coord[1]
+                coords.append(coord)
             # Add data to "matrix" (list of lists)
             for i in range(doubleAPlus, doubleAPlus + amount * amount):
                 # If at the end of matrix row add new list to matrix
@@ -64,8 +72,10 @@ class ReadCaverns(object):
                 connections[j].append((int(data[i].strip())))
             # Close file
             file.close()
+
+            Window.size = tuple((x + 2, y + 2))
             # Return data
-            return coords, connections
+            return tuple((coords, connections))
         else:
             # Close file
             file.close()

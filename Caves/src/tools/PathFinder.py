@@ -1,3 +1,5 @@
+from tools.Window import Window
+import tkinter as tk
 
 __author__ = 'Emma'
 __project__ = 'Caves'
@@ -7,50 +9,72 @@ class PathFinder(object):
 
     # Method to do the search
     @staticmethod
-    def FindPath(coords, connections, stepping):
+    def FindPath(coords, connections, step):
+
         print("Calculating...")
         path = {}
         # Set start and end coordinates
         start = coords[0]
         end = coords[len(coords) - 1]
+        if step:
+            Window.buttons["Step"].wait_variable(Window.var)
+            Window.var.set(0)
+        Window.can.itemconfig(Window.points[start], fill='#FFC0CB', outline='#FFC0CB')
+        Window.can.itemconfig(Window.points[end], fill='#FFFFF1', outline='#FFFFF1')
+
         # Initialise sets
         closedSet = set()
         openSet = {start}
         gScoreMap = {start: 0}
         fScoreMap = {start: PathFinder.SquaredDist(start, end)}
 
+        if step:
+            Window.buttons["Step"].wait_variable(Window.var)
+            Window.var.set(0)
+
         # While openset isn't empty
-        while openSet != {}:
+        while len(openSet) != 0:
             # set current to min score currently in the open set
-            current = PathFinder.FindMin(openSet, fScoreMap, stepping)
-            if stepping:
-                input("current: " + str(current))
+            current = PathFinder.FindMin(openSet, fScoreMap)
+            if current != start and current != end:
+                Window.can.itemconfig(Window.points[current], fill='blue', outline='blue')
+
             # if goal reached
             if current == end:
-                if stepping:
-                    input("GOAL REACHED")
-                else:
-                    print("GOAL REACHED")
+                print("GOAL REACHED")
                 # return path
-                return PathFinder.GetPath(path, end)
+                path = PathFinder.GetPath(path, end)
+                Window.labels["path"].config(text="Path Length: " + str(len(path)))
+                for p in path:
+                    if p != start and p != end:
+                        if step:
+                            Window.buttons["Step"].wait_variable(Window.var)
+                            Window.var.set(0)
+                        Window.can.itemconfig(Window.points[p], fill='green', outline='green')
+                    elif p == end:
+                        if step:
+                            Window.buttons["Step"].wait_variable(Window.var)
+                            Window.var.set(0)
+                        Window.can.itemconfig(Window.points[p], fill='#32D732', outline='#32D732')
+                if step:
+                    Window.buttons["Step"].destroy()
+                return 0
 
             # Find the caves this node is connected too
             neighbours = PathFinder.FindNeighbours(current, coords, connections)
             # remove current from open set
             openSet.remove(current)
-            # add current path to closed set
-            closedSet.update([current])
 
             # loop through neighbours
             for n in neighbours:
+                if n != start and n != end and n not in openSet and n not in closedSet:
+                    Window.can.itemconfig(Window.points[n], fill='#FFA500', outline='#FFA500')
                 # ignore if neighbour is closed
                 if n in closedSet:
                     continue
                 # add to open set
                 if n not in openSet:
                     openSet.update([n])
-                if stepping:
-                    print("Checking neighbour: " + str(n))
                 # work out g score
                 tempGScore = gScoreMap[current] + PathFinder.SquaredDist(current, n)
 
@@ -63,21 +87,26 @@ class PathFinder(object):
                 path.update({n: current})
                 # update f score
                 fScoreMap.update({n: gScoreMap[n] + PathFinder.SquaredDist(n, end)})
+
+            # add current path to closed set
+            closedSet.update([current])
+            if step and current != start:
+                Window.buttons["Step"].wait_variable(Window.var)
+                Window.var.set(0)
+                Window.can.itemconfig(Window.points[current], fill='#b1e3e7', outline='#b1e3e7')
         # Inform user no route was found
         print("NO ROUTE")
         return 1
 
     # Finding the minimum
     @staticmethod
-    def FindMin(theSet, m, stepping):
+    def FindMin(theSet, m):
         # Initialise min int and current min
         theMin = None
         currentMin = None
 
         # Loop through set
         for s in theSet:
-            if stepping:
-                print(str(s) + ": " + str(m[s]))
             # if Min hasn't been set yet
             if theMin is None:
                 theMin = m[s]
@@ -120,6 +149,7 @@ class PathFinder(object):
             # update current
             current = camefrom[current]
             path.append(current)
+
         # Return path reversed
         return path[::-1]
 
